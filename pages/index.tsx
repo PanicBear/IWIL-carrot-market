@@ -3,6 +3,24 @@ import type { NextPage } from 'next';
 const Home: NextPage = () => {
   return (
     <div className="bg-slate-400 py-20 px-20 grid gap-10 min-h-screen">
+      <div>
+        <form className="flex flex-col space-y-2 bg-blue-500 p-5 focus-within:bg-blue-100">
+          <input type="text" disabled placeholder="Nickname" className="disabled:opacity-50" />
+          <input
+            type="text"
+            required
+            placeholder="Username"
+            className="required:bg-yellow-500 invalid:bg-red-500 valid:bg-teal-500"
+          />
+          <input
+            type="password"
+            required
+            placeholder="Password"
+            className="placeholder-shown:bg-teal-500 placeholder-red-500"
+          />
+          <input type="submit" value="Login" className="bg-white" />
+        </form>
+      </div>
       <div className="bg-white p-6 rounded-3xl shadow-xl">
         <span className="font-semibold text-3xl">Select Item</span>
         <ul>
