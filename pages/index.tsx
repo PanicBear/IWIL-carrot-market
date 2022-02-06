@@ -4,6 +4,14 @@ const Home: NextPage = () => {
   return (
     <div className="bg-slate-400 py-20 px-20 grid gap-10 min-h-screen">
       <div>
+        <form className="flex flex-col space-y-2 bg-blue-500 p-5">
+          <input type="text" required placeholder="Nickname" className="border p-1 peer border-gray-400 rounded" />
+          <span className="hidden peer-invalid:block peer-invalid:text-red-500">This input is invalid</span>
+          <span className="hidden peer-valid:block peer-valid:text-teal-500">Awesome username</span>
+          <input type="submit" value="Login" className="" />
+        </form>
+      </div>
+      <div>
         <form className="flex flex-col space-y-2 bg-blue-500 p-5 focus-within:bg-blue-100">
           <input type="text" disabled placeholder="Nickname" className="disabled:opacity-50" />
           <input
