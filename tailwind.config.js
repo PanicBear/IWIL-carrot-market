@@ -1,7 +1,8 @@
 module.exports = {
-  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
+  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {},
   },
-  plugins: [],
+  darkMode: 'media',
+  plugins: [require('@tailwindcss/forms')],
 };
