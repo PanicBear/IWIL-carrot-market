@@ -59,7 +59,7 @@ const CommunityPostDetail: NextPage = () => {
           <div className="w-8 h-8 bg-slate-200 rounded-full" />
           <div>
             <span className="text-sm block font-medium text-gray-700">Steve Jebs</span>
-            <span className="text-xs text-gray-500 block">2 시간 전</span>
+            <span className="text-xs text-gray-500 block">2시간 전</span>
             <p className="text-gray-700 mt-2">The best mandu restaurant is the one next to my house.</p>
           </div>
         </div>
