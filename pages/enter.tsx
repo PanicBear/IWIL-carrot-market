@@ -37,7 +37,7 @@ export default function Enter() {
         </div>
         <form className="flex flex-col mt-8">
           <label htmlFor="input" className="flex-sm font-medium text-gray-700">
-            {method === 'email' ? 'Emaiㅑl address' : null}
+            {method === 'email' ? 'Email address' : null}
             {method === 'phone' ? 'Phone number' : null}
           </label>
           <div className="mt-1">
