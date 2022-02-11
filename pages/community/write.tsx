@@ -9,7 +9,7 @@ const Write: NextPage = () => {
         rows={4}
         placeholder="Ask a question!"
       />
-      <Button>Submit</Button>
+      <Button text="Submit" />
     </form>
   );
 };

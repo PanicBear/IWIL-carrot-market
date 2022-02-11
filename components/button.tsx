@@ -2,14 +2,14 @@ import { cls } from "../libs/utils";
 
 interface ButtonType {
   large?: boolean;
-  children: React.ReactNode;
+  text: string;
   [key: string]: any;
 }
 
 export default function Button({
   large = false,
   onClick,
-  children,
+  text,
   ...attrs
 }: ButtonType) {
   return (
@@ -21,7 +21,7 @@ export default function Button({
         large ? "py-3 text-base" : "py-2 text-sm "
       )}
     >
-      {children}
+      {text}
     </button>
   );
 }
