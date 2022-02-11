@@ -1,5 +1,5 @@
-import type { NextPage } from 'next';
-import Layout from '../../components/layout';
+import type { NextPage } from "next";
+import Layout from "../../components/layout";
 
 const ItemDetail: NextPage = () => {
   return (
@@ -11,25 +11,29 @@ const ItemDetail: NextPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
               <p className="text-sm font-medium text-gray-700">Steve Jebs</p>
-              <p className="text-xs font-medium text-gray-500">View profile &rarr;</p>
+              <p className="text-xs font-medium text-gray-500">
+                View profile &rarr;
+              </p>
             </div>
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">Galaxy S50</h1>
             <span className="text-2xl block mt-3 text-gray-900">$140</span>
-            <p className="text-base my-6 text-gray-700">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-              industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-              and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-              into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-              release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-              software like Aldus PageMaker including versions of Lorem Ipsum.
+            <p className=" my-6 text-gray-700">
+              My money&apos;s in that office, right? If she start giving me some
+              bullshit about it ain&apos;t there, and we got to go someplace
+              else and get it, I&apos;m gonna shoot you in the head then and
+              there. Then I&apos;m gonna shoot that bitch in the kneecaps, find
+              out where my goddamn money is. She gonna tell me too. Hey, look at
+              me when I&apos;m talking to you, motherfucker. You listen: we go
+              in there, and that ni**a Winston or anybody else is in there, you
+              the first motherfucker to get shot. You understand?
             </p>
             <div className="flex items-center justify-between space-x-2">
-              <button className="flex-1 bg-orange-500 text-white py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 font-medium hover:bg-orange-600 focus:ring-orange-500">
+              <button className="flex-1 bg-orange-500 text-white py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 font-medium hover:bg-orange-600 focus:ring-orange-500 ">
                 Talk to seller
               </button>
-              <button className="p-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 ">
+              <button className="p-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                 <svg
                   className="h-6 w-6 "
                   xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +55,7 @@ const ItemDetail: NextPage = () => {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className=" mt-6 grid grid-cols-2 gap-4">
             {[1, 2, 3, 4, 5, 6].map((_, i) => (
               <div key={i}>
                 <div className="h-56 w-full mb-4 bg-slate-300" />

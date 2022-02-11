@@ -1,23 +1,27 @@
-import type { NextPage } from 'next';
-import Layout from '../../components/layout';
+import type { NextPage } from "next";
+import Layout from "../../components/layout";
 
 const Community: NextPage = () => {
   return (
-    <Layout title="동네생활" hasTabBar>
-      <div className="py-10 space-y-8">
+    <Layout hasTabBar title="동내생활">
+      <div className="space-y-4 divide-y-[2px]">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
-          <div key={i} className="flex cursor-pointer flex-col items-start">
-            <span className="flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+          <div
+            key={i}
+            className="flex cursor-pointer flex-col pt-4 items-start"
+          >
+            <span className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
               동네질문
             </span>
-            <div className="mt-2 text-gray-700">
-              <span className="text-orange-500 font-medium">Q.</span> What is the best mandu restaurant?
+            <div className="mt-2 px-4 text-gray-700">
+              <span className="text-orange-500 font-medium">Q.</span> What is
+              the best mandu restaurant?
             </div>
-            <div className="mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
+            <div className="mt-5 px-4 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
               <span>니꼬</span>
               <span>18시간 전</span>
             </div>
-            <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
+            <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t   w-full">
               <span className="flex space-x-2 items-center text-sm">
                 <svg
                   className="w-4 h-4"
@@ -55,7 +59,7 @@ const Community: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed hover:bg-orange-500 transition-colors cursor-pointer bottom-24 right-5 shadow-xl bg-orange-400 rounded-full p-4 text-white">
+        <button className="fixed hover:bg-orange-500 transition-colors cursor-pointer  bottom-24 right-5 shadow-xl bg-orange-400 rounded-full p-4 text-white">
           <svg
             className="w-6 h-6"
             fill="none"

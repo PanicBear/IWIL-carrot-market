@@ -1,20 +1,20 @@
-import type { NextPage } from 'next';
-import Layout from '../../components/layout';
+import type { NextPage } from "next";
+import Layout from "../../components/layout";
 
 const Profile: NextPage = () => {
   return (
-    <Layout title="마이 캐럿" hasTabBar>
-      <div className="py-10 px-4">
-        <div className="flex items-center space-x-3">
+    <Layout hasTabBar title="나의 캐럿">
+      <div className="px-4">
+        <div className="flex items-center mt-4 space-x-3">
           <div className="w-16 h-16 bg-slate-500 rounded-full" />
           <div className="flex flex-col">
             <span className="font-medium text-gray-900">Steve Jebs</span>
-            <span className="text-sm text-gray-700 cursor-pointer">Edit profile &rarr;</span>
+            <span className="text-sm text-gray-700">Edit profile &rarr;</span>
           </div>
         </div>
         <div className="mt-10 flex justify-around">
-          <div className="flex flex-col items-center cursor-pointer">
-            <div className="w-14 h-14 text-white bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="w-14 h-14 text-white bg-orange-400 rounded-full flex items-center justify-center">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -30,10 +30,12 @@ const Profile: NextPage = () => {
                 ></path>
               </svg>
             </div>
-            <span className="text-sm mt-2 font-medium text-gray-700">판매내역</span>
+            <span className="text-sm mt-2 font-medium text-gray-700">
+              판매내역
+            </span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer">
-            <div className="w-14 h-14 text-white bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="w-14 h-14 text-white bg-orange-400 rounded-full flex items-center justify-center">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -49,10 +51,12 @@ const Profile: NextPage = () => {
                 ></path>
               </svg>
             </div>
-            <span>구매내역</span>
+            <span className="text-sm mt-2 font-medium text-gray-700">
+              구매내역
+            </span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer">
-            <div className="w-14 h-14 text-white bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="w-14 h-14 text-white bg-orange-400 rounded-full flex items-center justify-center">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -68,7 +72,9 @@ const Profile: NextPage = () => {
                 ></path>
               </svg>
             </div>
-            <span>관심목록</span>
+            <span className="text-sm mt-2 font-medium text-gray-700">
+              관심목록
+            </span>
           </div>
         </div>
         <div className="mt-12">
@@ -127,12 +133,12 @@ const Profile: NextPage = () => {
           </div>
           <div className="mt-4 text-gray-600 text-sm">
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-              industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-              and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-              into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-              release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-              software like Aldus PageMaker including versions of Lorem Ipsum.
+              Normally, both your asses would be dead as fucking fried chicken,
+              but you happen to pull this shit while I&apos;m in a transitional
+              period so I don&apos;t wanna kill you, I wanna help you. But I
+              can&apos;t give you this case, it don&apos;t belong to me.
+              Besides, I&apos;ve already been through too much shit this morning
+              over this case to hand it over to your dumb ass.
             </p>
           </div>
         </div>
