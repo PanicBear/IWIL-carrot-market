@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
+import Floating from "../../components/floating-button";
 import Layout from "../../components/layout";
 
 const Community: NextPage = () => {
   return (
-    <Layout hasTabBar title="동내생활">
+    <Layout hasTabBar title="동네생활">
       <div className="space-y-4 divide-y-[2px]">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
           <div
@@ -59,7 +60,7 @@ const Community: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed hover:bg-orange-500 transition-colors cursor-pointer  bottom-24 right-5 shadow-xl bg-orange-400 rounded-full p-4 text-white">
+        <Floating href={""}>
           <svg
             className="w-6 h-6"
             fill="none"
@@ -74,7 +75,7 @@ const Community: NextPage = () => {
               d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
             ></path>
           </svg>
-        </button>
+        </Floating>
       </div>
     </Layout>
   );
