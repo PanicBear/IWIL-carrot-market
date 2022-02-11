@@ -1,6 +1,6 @@
-import type { NextPage } from 'next';
+import type { NextPage } from "next";
 
-const Edit: NextPage = () => {
+const EditProfile: NextPage = () => {
   return (
     <div className="py-10 px-4 space-y-4">
       <div className="flex items-center space-x-3">
@@ -14,7 +14,7 @@ const Edit: NextPage = () => {
         </label>
       </div>
       <div className="space-y-1">
-        <label htmlFor="email" className="flex-sm font-medium text-gray-700">
+        <label htmlFor="email" className="text-sm font-medium text-gray-700">
           Email address
         </label>
         <input
@@ -25,7 +25,7 @@ const Edit: NextPage = () => {
         />
       </div>
       <div className="space-y-1">
-        <label htmlFor="phone" className="flex-sm font-medium text-gray-700">
+        <label htmlFor="phone" className="text-sm font-medium text-gray-700">
           Phone number
         </label>
         <div className="flex rounded-md shadow-sm">
@@ -33,19 +33,18 @@ const Edit: NextPage = () => {
             +82
           </span>
           <input
-            id="phone"
-            type="tel"
-            pattern="[0-9]{2,3}[0-9]{3,4}[0-9]{4}"
+            id="input"
+            type="number"
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
             required
           />
         </div>
       </div>
-      <button className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none">
+      <button className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none ">
         Update profile
       </button>
     </div>
   );
 };
 
-export default Edit;
+export default EditProfile;
