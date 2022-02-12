@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Floating from "../components/floating-button";
+import FloatingButton from "../components/floating-button";
 import Layout from "../components/layout";
 import Item from "../components/item";
 
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
             comments={1}
           />
         ))}
-        <Floating href={"/items/upload"}>
+        <FloatingButton href={"/items/upload"}>
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
           </svg>
-        </Floating>
+        </FloatingButton>
       </div>
     </Layout>
   );

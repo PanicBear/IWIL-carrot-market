@@ -16,7 +16,7 @@ const Create: NextPage = () => {
           kind="price"
           required
         />
-        <TextArea name="description" label="description" />
+        <TextArea name="description" label="Description" />
         <Button text="Go live" />
       </form>
     </Layout>

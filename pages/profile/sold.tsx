@@ -4,7 +4,7 @@ import Item from "../../components/item";
 
 const Sold: NextPage = () => {
   return (
-    <Layout title="판매목록" canGoBack>
+    <Layout title="판매내역" canGoBack>
       <div className="flex flex-col space-y-5 py-10">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
           <Item

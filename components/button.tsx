@@ -1,6 +1,6 @@
 import { cls } from "../libs/utils";
 
-interface ButtonType {
+interface ButtonProps {
   large?: boolean;
   text: string;
   [key: string]: any;
@@ -11,7 +11,7 @@ export default function Button({
   onClick,
   text,
   ...attrs
-}: ButtonType) {
+}: ButtonProps) {
   return (
     <button
       {...attrs}

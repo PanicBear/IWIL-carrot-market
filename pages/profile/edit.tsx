@@ -5,7 +5,7 @@ import Layout from "../../components/layout";
 
 const EditProfile: NextPage = () => {
   return (
-    <Layout title="Edit Profile">
+    <Layout title="Edit Profile" canGoBack>
       <form className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-14 h-14 rounded-full bg-slate-500" />
