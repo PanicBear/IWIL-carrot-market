@@ -7,8 +7,9 @@ import { useForm } from 'react-hook-form';
 // Easier Inputs
 
 export default function Forms() {
-  const { register } = useForm();
-  console.log(register('name'));
+  const { register, watch, handleSubmit } = useForm();
+  console.log(watch('username'));
+  console.log(watch());
   return (
     <form>
       <input {...register('username')} type="text" placeholder="Username" required minLength={5} />
