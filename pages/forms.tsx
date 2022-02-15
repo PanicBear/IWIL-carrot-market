@@ -11,15 +11,21 @@ export default function Forms() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    setError,
+    reset,
   } = useForm<LoginForm>({ mode: 'onChange' });
   const onValid = (data: LoginForm) => {
     console.log('inputs validated');
+    setError('username', { message: 'Duplicated username' });
+    reset();
   };
   const onInvalid = (errors: FieldErrors) => {
     console.log(errors);
   };
 
   console.log(errors);
+  setValue('username', 'clarko');
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)}>
@@ -34,6 +40,7 @@ export default function Forms() {
         type="text"
         placeholder="Username"
       />
+      {errors.username?.message}
       <input
         {...register('email', {
           required: 'Email is required',
