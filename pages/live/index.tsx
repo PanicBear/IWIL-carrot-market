@@ -1,7 +1,6 @@
-import type { NextPage } from "next";
-import Link from "next/link";
-import FloatingButton from "../../components/floating-button";
-import Layout from "../../components/layout";
+import type { NextPage } from 'next';
+import Link from 'next/link';
+import { FloatingButton, Layout } from '@components/index';
 
 const Live: NextPage = () => {
   return (
@@ -11,9 +10,7 @@ const Live: NextPage = () => {
           <Link key={i} href={`/live/${i}`}>
             <a className="pt-4 block  px-4">
               <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-              <h1 className="text-2xl mt-2 font-bold text-gray-900">
-                Galaxy S50
-              </h1>
+              <h1 className="text-2xl mt-2 font-bold text-gray-900">Galaxy S50</h1>
             </a>
           </Link>
         ))}
