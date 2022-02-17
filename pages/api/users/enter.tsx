@@ -1,6 +1,9 @@
+import twilio from 'twilio';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { client, withHandler } from '@libs/server/index';
 import type { ResponseType } from '@customTypes/index';
+
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const { phone, email } = req.body;
@@ -23,9 +26,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
     },
   });
-
-  console.log(token);
-
+  if (phone) {
+    const message = await twilioClient.messages.create({
+      messagingServiceSid: process.env.TWILIO_MSID,
+      to: process.env.MY_PHONE!, // unable to set 'phone' from req.body, cause this is test account
+      body: `Your login token is ${payload}.`,
+    });
+    console.log(message);
+  }
   return res.json({
     ok: true,
   });
