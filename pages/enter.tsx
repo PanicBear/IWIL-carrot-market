@@ -65,14 +65,12 @@ export default function Enter() {
           ) : null}
           {method === 'phone' ? (
             <Input
-              register={register('phone', {
-                pattern: /[0-9]{2,3}[0-9]{3,4}[0-9]{4}/,
-              })}
+              register={register('phone')}
               name="input"
               label="Phone number"
               kind="phone"
               type="tel"
-              placeholder="01000000000"
+              placeholder="8201000000000"
               required
             />
           ) : null}
