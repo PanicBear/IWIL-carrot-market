@@ -69,7 +69,7 @@ export default function Enter() {
               name="input"
               label="Phone number"
               kind="phone"
-              type="tel"
+              type="number"
               placeholder="8201000000000"
               required
             />
