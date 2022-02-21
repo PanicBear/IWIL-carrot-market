@@ -1,6 +1,5 @@
 import type { ResponseType } from '@customTypes/index';
-import { client, withHandler } from '@libs/server/index';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { client, withApiSession, withHandler } from '@libs/server/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 declare module 'iron-session' {
@@ -25,10 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     id: tokenWithUser.userId,
   };
   await req.session.save();
-  res.status(200).end();
+  res.json({ ok: true });
 }
 
-export default withIronSessionApiRoute(withHandler('POST', handler), {
-  cookieName: 'carrotsession',
-  password: 'sodkfo90whgodjwognwoeriroghtutq;sofufbsofjrgbaoasdi',
-});
+export default withApiSession(withHandler('POST', handler));
