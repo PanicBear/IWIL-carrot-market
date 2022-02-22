@@ -1,7 +1,12 @@
+import { FloatingButton, Item, Layout } from '@components/index';
+import { useUser } from '@libs/client/index';
 import type { NextPage } from 'next';
-import { FloatingButton, Layout, Item } from '@components/index';
 
 const Home: NextPage = () => {
+  const { user, isLoading } = useUser();
+
+  console.log(user);
+
   return (
     <Layout title="홈" hasTabBar>
       <div className="flex flex-col space-y-5 py-10">
