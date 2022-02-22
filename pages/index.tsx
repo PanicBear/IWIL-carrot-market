@@ -3,7 +3,7 @@ import { useUser } from '@libs/client/index';
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
-  const user = useUser();
+  const { user, isLoading } = useUser();
 
   console.log(user);
 
