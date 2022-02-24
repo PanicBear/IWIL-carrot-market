@@ -19,9 +19,9 @@ model User {
   name      String
   avatar    String?
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  Tokens    Token[]
-  Products  Product[]
+  updatedAt DateTime  @updatedAt
+  tokens    Token[]
+  products  Product[]
 }
 
 model Token {
@@ -30,17 +30,17 @@ model Token {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  updatedAt DateTime @updatedAt
 }
 
 model Product {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
+  updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   imageUrl    String
   name        String
-  price       Float
+  price       Int
   description String   @db.MediumText
 }
