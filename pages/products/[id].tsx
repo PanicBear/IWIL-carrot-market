@@ -16,8 +16,28 @@ interface ItemDetailResponse {
 }
 
 const ItemDetail: NextPage = () => {
+  const date = new Date();
   const router = useRouter();
-  const { data } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  const { data: loading, error } = useSWR<ItemDetailResponse>(
+    router.query.id ? `/api/products/${router.query.id}` : null,
+  );
+  const data: ItemDetailResponse = loading || {
+    ok: false,
+    product: {
+      user: { id: 0, createdAt: date, name: '--', updatedAt: date, email: null, phone: null, avatar: null },
+      userId: 0,
+      id: 0,
+      name: '--',
+      price: 0,
+      description: '--',
+      imageUrl: '',
+      createdAt: date,
+      updatedAt: date,
+    },
+    relatedProducts: [],
+  };
+
+  console.log(data);
 
   return (
     <Layout canGoBack>
