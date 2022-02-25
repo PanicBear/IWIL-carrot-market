@@ -3,9 +3,9 @@ import { client, withApiSession, withHandler } from '@libs/server/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
-  const { id } = req.query;
   switch (req.method) {
     case 'GET':
+      const { id } = req.query;
       const product = await client.product.findUnique({
         where: {
           id: +id,
@@ -20,9 +20,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           },
         },
       });
+      const terms = product?.name.split(' ').map((word) => ({ name: { contains: word } }));
+      const relatedProducts = await client.product.findMany({
+        where: {
+          OR: terms,
+          NOT: {
+            id: product?.id,
+          },
+        },
+      });
       res.json({
         ok: true,
         product,
+        relatedProducts,
       });
       break;
     case 'POST':
