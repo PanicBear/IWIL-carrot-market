@@ -5,7 +5,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   switch (req.method) {
     case 'GET':
-      const { id } = req.query;
+      const {
+        query: { id },
+        session: { user },
+      } = req;
       const product = await client.product.findUnique({
         where: {
           id: +id,
@@ -29,9 +32,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           },
         },
       });
+      const isLiked = Boolean(
+        await client.fav.findFirst({
+          where: {
+            userId: user?.id,
+            productId: product?.id,
+          },
+          select: { id: true },
+        }),
+      );
       res.json({
         ok: true,
         product,
+        isLiked,
         relatedProducts,
       });
       break;
