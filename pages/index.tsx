@@ -4,9 +4,13 @@ import { Product } from '.prisma/client';
 import type { NextPage } from 'next';
 import useSWR from 'swr';
 
+interface ProductWithCount extends Product {
+  _count: any;
+}
+
 interface ProductResponse {
   ok: boolean;
-  products: Product[];
+  products: ProductWithCount[];
 }
 
 const Home: NextPage = () => {
@@ -17,9 +21,16 @@ const Home: NextPage = () => {
 
   return (
     <Layout title="홈" hasTabBar>
-      <div className="flex flex-col space-y-5 py-10">
+      <div className="flex flex-col space-y-1 py-2 divide-y">
         {data?.products?.map((product) => (
-          <Item key={product.id} id={product.id} title={product.name} price={product.price} hearts={1} comments={1} />
+          <Item
+            key={product.id}
+            id={product.id}
+            title={product.name}
+            price={product.price}
+            hearts={product._count.favs}
+            comments={1}
+          />
         ))}
         <FloatingButton href={'/products/upload'}>
           <svg
