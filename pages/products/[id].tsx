@@ -1,10 +1,10 @@
 import { Product, User } from '.prisma/client';
 import { Button, Layout } from '@components/index';
-import { cls, useMutation } from '@libs/client';
+import { cls, useMutation, useUser } from '@libs/client';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 
 interface ProductWithUser extends Product {
   user: User;
@@ -19,11 +19,17 @@ interface ItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  const { data, mutate } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  // const { user, isLoading } = useUser();
+  // const { mutate } = useSWRConfig();
+  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
+    router.query.id ? `/api/products/${router.query.id}` : null,
+  );
+
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     if (!data) return;
-    mutate({ ...data, isLiked: !data.isLiked }, false);
+    boundMutate((prev: any) => prev && { ...prev, isLiked: !prev.isLiked }, false);
+    // mutate('/api/users/me', (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
 
@@ -35,16 +41,35 @@ const ItemDetail: NextPage = () => {
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
-              <p className="text-sm font-medium text-gray-700">{data?.product?.user?.name}</p>
-              <Link href={`/users/profiles/${data?.product.userId}`}>
-                <a className="text-xs font-medium text-gray-500">View profile &rarr;</a>
-              </Link>
+              {data ? (
+                <>
+                  <p className="text-sm font-medium text-gray-700">{data.product.user.name}</p>
+                  <Link href={`/users/profiles/${data.product.userId}`}>
+                    <a className="text-xs font-medium text-gray-500">View profile &rarr;</a>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-medium text-gray-700">Loading</p>
+                  <a className="text-xs font-medium text-gray-500">View profile &rarr;</a>
+                </>
+              )}
             </div>
           </div>
           <div className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">{data?.product.name}</h1>
-            <span className="text-2xl block mt-3 text-gray-900">{data?.product.price}원</span>
-            <p className=" my-6 text-gray-700">{data?.product.description}</p>
+            {data ? (
+              <>
+                <h1 className="text-3xl font-bold text-gray-900">{data.product.name}</h1>
+                <span className="text-2xl block mt-3 text-gray-900">{data.product.price}원</span>
+                <p className=" my-6 text-gray-700">{data.product.description}</p>
+              </>
+            ) : (
+              <>
+                <h1 className="text-3xl font-bold text-gray-900">Loading</h1>
+                <span className="text-2xl block mt-3 text-gray-900">Loading</span>
+                <p className=" my-6 text-gray-700">Loading</p>
+              </>
+            )}
             <div className="flex items-center justify-between space-x-2">
               <Button large text="Talk to seller" />
               <button
