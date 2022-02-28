@@ -18,11 +18,12 @@ interface ItemDetailResponse {
 }
 
 const ItemDetail: NextPage = () => {
-  const date = new Date();
   const router = useRouter();
-  const { data, error } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  const { data, mutate } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
+    if (!data) return;
+    mutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFav({});
   };
 
@@ -34,7 +35,7 @@ const ItemDetail: NextPage = () => {
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
-              <p className="text-sm font-medium text-gray-700">{data?.product.user.name}</p>
+              <p className="text-sm font-medium text-gray-700">{data?.product?.user?.name}</p>
               <Link href={`/users/profiles/${data?.product.userId}`}>
                 <a className="text-xs font-medium text-gray-500">View profile &rarr;</a>
               </Link>
@@ -54,7 +55,7 @@ const ItemDetail: NextPage = () => {
                 )}
               >
                 {data?.isLiked ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                     <path
                       fillRule="evenodd"
                       d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
@@ -85,7 +86,7 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map((relatedProduct) => (
+            {data?.relatedProducts?.map((relatedProduct) => (
               <Link href={`/products/${relatedProduct.id}`} key={relatedProduct.id}>
                 <a>
                   <div className="h-56 w-full mb-4 bg-slate-300" />
