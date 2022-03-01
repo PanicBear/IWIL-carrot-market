@@ -1,6 +1,6 @@
 import { Answer, Post, User } from '.prisma/client';
 import { Layout, TextArea } from '@components/index';
-import { useMutation } from '@libs/client';
+import { cls, useMutation } from '@libs/client';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -27,19 +27,40 @@ interface PostWithUser extends Post {
 interface CommunityPostResponse {
   ok: boolean;
   post: PostWithUser;
+  isWondered: boolean;
 }
 
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
-  const { data, error } = useSWR<CommunityPostResponse>(router.query.id ? `/api/posts/${router.query.id}` : null);
+  const { data, mutate } = useSWR<CommunityPostResponse>(router.query.id ? `/api/posts/${router.query.id}` : null);
   const [answer, { loading, data: answerData, error: answerError }] = useMutation<AnswerFormInput>(
     `/api/post/${router.query.id}/answer`,
   );
   const { register, handleSubmit } = useForm<AnswerFormInput>();
+  const [wonder] = useMutation(`/api/posts/${router.query.id}/wonder`);
 
   const onValid = (data: AnswerFormInput) => {
     console.log(data);
     // answer(data);
+  };
+  const onWonderClick = () => {
+    if (!data) return;
+    mutate(
+      (prev) =>
+        prev && {
+          ...prev,
+          isWondered: !prev.isWondered,
+          post: {
+            ...prev.post,
+            _count: {
+              ...prev.post._count,
+              wonderings: prev.isWondered ? prev.post._count.wonderings - 1 : prev.post._count.wonderings + 1,
+            },
+          },
+        },
+      false,
+    );
+    wonder({});
   };
 
   return (
@@ -60,10 +81,13 @@ const CommunityPostDetail: NextPage = () => {
         <div>
           <div className="mt-2 px-4 text-gray-700">
             <span className="text-orange-500 font-medium">Q. </span>
-            {data ? `${data.post.question}` : 'Loading'}
+            {data ? `${data.post?.question}` : 'Loading'}
           </div>
           <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px]  w-full">
-            <span className="flex space-x-2 items-center text-sm">
+            <button
+              onClick={onWonderClick}
+              className={cls('flex space-x-2 items-center text-sm', data?.isWondered ? 'text-teal-400' : '')}
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -79,7 +103,7 @@ const CommunityPostDetail: NextPage = () => {
                 ></path>
               </svg>
               <span>궁금해요 {data ? `${data.post?._count.wonderings}` : 0}</span>
-            </span>
+            </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
                 className="w-4 h-4"
@@ -100,7 +124,7 @@ const CommunityPostDetail: NextPage = () => {
           </div>
         </div>
         <div className="px-4 my-5 space-y-5">
-          {data?.post.answers.map((answer) => {
+          {data?.post?.answers.map((answer) => {
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-slate-200 rounded-full" />
               <div>

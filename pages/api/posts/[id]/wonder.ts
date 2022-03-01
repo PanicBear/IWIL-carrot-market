@@ -4,49 +4,47 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   switch (req.method) {
-    case 'GET':
+    case 'POST':
       const {
         query: { id },
+        session: { user },
       } = req;
-      const post = await client.post.findUnique({
+      const alreadyExists = await client.wondering.findFirst({
         where: {
-          id: +id,
+          userId: user?.id,
+          postId: +id,
         },
-        include: {
-          answers: {
-            select: {
-              answer: true,
-              id: true,
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  avatar: true,
-                },
+        select: {
+          id: true,
+        },
+      });
+      if (alreadyExists) {
+        await client.wondering.delete({
+          where: {
+            id: alreadyExists.id,
+          },
+        });
+      } else {
+        await client.wondering.create({
+          data: {
+            user: {
+              connect: {
+                id: user?.id,
+              },
+            },
+            post: {
+              connect: {
+                id: +id,
               },
             },
           },
-          _count: {
-            select: {
-              wonderings: true,
-              answers: true,
-            },
-          },
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatar: true,
-            },
-          },
-        },
-      });
+        });
+      }
       res.json({
         ok: true,
-        post,
       });
       break;
-    case 'POST':
+    case 'GET':
     case 'PUT':
     case 'DELETE':
     default:
@@ -59,7 +57,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ['POST'],
     handler,
   }),
 );
