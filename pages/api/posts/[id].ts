@@ -1,0 +1,65 @@
+import type { ResponseType } from '@customTypes/index';
+import { client, withApiSession, withHandler } from '@libs/server/index';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+  switch (req.method) {
+    case 'GET':
+      const {
+        query: { id },
+      } = req;
+      const post = await client.post.findUnique({
+        where: {
+          id: +id,
+        },
+        include: {
+          answers: {
+            select: {
+              answer: true,
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatar: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              wonderings: true,
+              answers: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      });
+      res.json({
+        ok: true,
+        post,
+      });
+      break;
+    case 'POST':
+    case 'PUT':
+    case 'DELETE':
+    default:
+      res.json({
+        ok: false,
+        message: 'Method not allowed',
+      });
+  }
+}
+
+export default withApiSession(
+  withHandler({
+    methods: ['GET'],
+    handler,
+  }),
+);
