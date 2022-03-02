@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
-interface AnswerFormInput {
+interface AnswerForm {
   answer: string;
 }
 
@@ -33,13 +33,13 @@ interface CommunityPostResponse {
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { data, mutate } = useSWR<CommunityPostResponse>(router.query.id ? `/api/posts/${router.query.id}` : null);
-  const [answer, { loading, data: answerData, error: answerError }] = useMutation<AnswerFormInput>(
+  const [answer, { loading, data: answerData, error: answerError }] = useMutation<AnswerForm>(
     `/api/post/${router.query.id}/answer`,
   );
-  const { register, handleSubmit } = useForm<AnswerFormInput>();
+  const { register, handleSubmit } = useForm<AnswerForm>();
   const [wonder] = useMutation(`/api/posts/${router.query.id}/wonder`);
 
-  const onValid = (data: AnswerFormInput) => {
+  const onValid = (data: AnswerForm) => {
     console.log(data);
     // answer(data);
   };
@@ -60,7 +60,9 @@ const CommunityPostDetail: NextPage = () => {
         },
       false,
     );
-    wonder({});
+    if (!loading) {
+      wonder({});
+    }
   };
 
   return (
