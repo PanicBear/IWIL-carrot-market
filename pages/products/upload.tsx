@@ -23,7 +23,7 @@ const Upload: NextPage = () => {
   const [upload, { loading, data, error }] = useMutation<UploadProductMutation>('/api/products');
 
   useEffect(() => {
-    if (data?.ok) router.push(`/products/${data.product.id}`);
+    if (data?.ok) router.replace(`/products/${data.product.id}`);
   }, [data, router]);
 
   const onValid = (data: UploadProductForm) => {
