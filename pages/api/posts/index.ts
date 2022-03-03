@@ -5,6 +5,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   switch (req.method) {
     case 'GET':
+      const {
+        query: { latitude: lat, longitude: lng },
+      } = req;
       const posts = await client.post.findMany({
         include: {
           user: {
@@ -19,6 +22,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
               answers: true,
               wonderings: true,
             },
+          },
+        },
+        where: {
+          latitude: {
+            gte: +lat - 0.01,
+            lte: +lat + 0.01,
+          },
+          longitude: {
+            gte: +lng - 0.01,
+            lte: +lng + 0.01,
           },
         },
       });
