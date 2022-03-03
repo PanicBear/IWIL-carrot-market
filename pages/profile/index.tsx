@@ -1,8 +1,11 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { Layout } from '@components/index';
+import useSWR from 'swr';
 
 const Profile: NextPage = () => {
+  const { data } = useSWR('/api/reviews');
+  console.log(data);
   return (
     <Layout hasTabBar title="나의 캐럿">
       <div className="px-4">
