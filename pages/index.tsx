@@ -1,12 +1,8 @@
 import { FloatingButton, Item, Layout } from '@components/index';
+import { ProductWithCount } from '@customTypes/index';
 import { useUser } from '@libs/client/index';
-import { Product } from '.prisma/client';
 import type { NextPage } from 'next';
 import useSWR from 'swr';
-
-interface ProductWithCount extends Product {
-  _count: any;
-}
 
 interface ProductResponse {
   ok: boolean;
