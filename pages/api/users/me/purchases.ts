@@ -12,11 +12,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     },
     include: {
       product: {
-        select: {
-          id: true,
-          imageUrl: true,
-          name: true,
-          price: true,
+        include: {
+          _count: {
+            select: {
+              favs: true,
+            },
+          },
         },
       },
     },
