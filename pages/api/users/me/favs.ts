@@ -10,9 +10,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     where: {
       userId: user?.id,
     },
-    include: {
+    select: {
+      id: true,
       product: {
-        include: {
+        select: {
           _count: {
             select: {
               favs: true,
