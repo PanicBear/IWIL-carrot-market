@@ -1,4 +1,5 @@
-import { Layout, Item } from '@components/index';
+import { Product } from '.prisma/client';
+import { Item } from '@components/index';
 import { ProductWithCount } from '@customTypes/index';
 import useSWR from 'swr';
 
@@ -6,7 +7,7 @@ interface ProductListProds {
   kind: 'favs' | 'sales' | 'purchases';
 }
 
-interface Record {
+interface Record extends Product {
   id: number;
   product: ProductWithCount;
 }
@@ -19,7 +20,7 @@ export default function ProductList({ kind }: ProductListProds) {
   const { data } = useSWR<ProductListResponse>(`/api/users/me/${kind}`);
   return data ? (
     <>
-      {data.sales?.map((record) => (
+      {data[kind]?.map((record) => (
         <Item
           key={record.id}
           id={record.id}
