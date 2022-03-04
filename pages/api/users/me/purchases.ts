@@ -14,6 +14,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       id: true,
       product: {
         select: {
+          price: true,
+          name: true,
           _count: {
             select: {
               favs: true,
