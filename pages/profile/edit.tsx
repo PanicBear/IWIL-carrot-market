@@ -1,10 +1,39 @@
-import type { NextPage } from 'next';
 import { Button, Input, Layout } from '@components/index';
+import { useMutation, useUser } from '@libs/client';
+import type { NextPage } from 'next';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+
+interface EditProfileForm {
+  email?: string;
+  phone?: string;
+  formErrors?: string;
+}
 
 const EditProfile: NextPage = () => {
+  const { user } = useUser();
+  const [edit, { loading, data, error }] = useMutation('/api');
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<EditProfileForm>();
+  const onValid = ({ email, phone }: EditProfileForm) => {
+    if ((!email && !phone) || (email && phone))
+      return setError('formErrors', { message: 'Email or Phone number is required. Choose one, not both.' });
+    edit({ email, phone });
+  };
+
+  useEffect(() => {
+    setValue('email', user?.email ?? '');
+    setValue('phone', user?.phone ?? '');
+  }, [user, setValue]);
+
   return (
     <Layout title="Edit Profile" canGoBack>
-      <form className="py-10 px-4 space-y-4">
+      <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-14 h-14 rounded-full bg-slate-500" />
           <label
@@ -15,16 +44,28 @@ const EditProfile: NextPage = () => {
             <input id="picture" type="file" className="hidden" accept="image/*" />
           </label>
         </div>
-        <Input name="email" label="Email address" type="email" required />
         <Input
-          name="input"
+          register={register('email', {
+            pattern: /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/,
+          })}
+          name="email"
+          label="Email address"
+          type="email"
+          required={false}
+        />
+        <Input
+          register={register('phone', {
+            pattern: /[0-9]{2,3}[0-9]{3,4}[0-9]{4}/,
+          })}
+          name="phone"
           label="Phone number"
           kind="phone"
           type="tel"
-          pattern="[0-9]{2,3}[0-9]{3,4}[0-9]{4}"
-          placeholder="01000000000"
-          required
+          required={false}
         />
+        {errors.formErrors ? (
+          <span className="my-2 text-red-500 font-medium text-center block">{errors.formErrors.message}</span>
+        ) : null}
         <Button text="Update profile" />
       </form>
     </Layout>
