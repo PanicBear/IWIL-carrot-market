@@ -7,12 +7,18 @@ import { useForm } from 'react-hook-form';
 interface EditProfileForm {
   email?: string;
   phone?: string;
+  name?: string;
   formErrors?: string;
+}
+
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
 }
 
 const EditProfile: NextPage = () => {
   const { user } = useUser();
-  const [edit, { loading, data, error }] = useMutation('/api');
+  const [editProfile, { loading, data }] = useMutation<EditProfileResponse>('/api/users/me');
   const {
     register,
     handleSubmit,
@@ -20,16 +26,23 @@ const EditProfile: NextPage = () => {
     setError,
     formState: { errors },
   } = useForm<EditProfileForm>();
-  const onValid = ({ email, phone }: EditProfileForm) => {
-    if ((!email && !phone) || (email && phone))
+  const onValid = ({ email, phone, name }: EditProfileForm) => {
+    if (loading) return;
+    if (!email && !phone && !name)
       return setError('formErrors', { message: 'Email or Phone number is required. Choose one, not both.' });
-    edit({ email, phone });
+    editProfile({ email, phone, name });
   };
 
   useEffect(() => {
+    setValue('name', user?.name ?? '');
     setValue('email', user?.email ?? '');
     setValue('phone', user?.phone ?? '');
   }, [user, setValue]);
+  useEffect(() => {
+    if (data && !data.ok) {
+      setError('formErrors', { message: data?.error });
+    }
+  }, [data, setError]);
 
   return (
     <Layout title="Edit Profile" canGoBack>
@@ -44,6 +57,7 @@ const EditProfile: NextPage = () => {
             <input id="picture" type="file" className="hidden" accept="image/*" />
           </label>
         </div>
+        <Input register={register('name', { required: true })} name="Name" label="name" type="text" required={true} />
         <Input
           register={register('email', {
             pattern: /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/,
@@ -66,7 +80,7 @@ const EditProfile: NextPage = () => {
         {errors.formErrors ? (
           <span className="my-2 text-red-500 font-medium text-center block">{errors.formErrors.message}</span>
         ) : null}
-        <Button text="Update profile" />
+        <Button text={loading ? 'Loading' : 'Update profile'} />
       </form>
     </Layout>
   );
