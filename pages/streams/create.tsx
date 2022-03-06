@@ -4,11 +4,11 @@ import { useMutation } from '@libs/client';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useForm, useFormState } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 interface CreateForm {
   name: string;
-  price: string;
+  price: number;
   description: string;
 }
 interface CreateResponse {
@@ -35,7 +35,13 @@ const Create: NextPage = () => {
   return (
     <Layout canGoBack title="Go Live">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
-        <Input register={register('name', { required: true })} type="text" name="name" label="Name" required />
+        <Input
+          register={register('name', { required: true, valueAsNumber: true })}
+          type="text"
+          name="name"
+          label="Name"
+          required
+        />
         <Input
           register={register('price', { required: true })}
           type="number"
