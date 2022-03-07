@@ -6,10 +6,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   switch (req.method) {
     case 'GET':
       const streams = await client.stream.findMany({
-        select: {
-          id: true,
-          name: true,
-        },
+        take: 10,
+        skip: 20,
       });
       return res.json({
         ok: true,
