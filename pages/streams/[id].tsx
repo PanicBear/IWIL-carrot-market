@@ -3,7 +3,6 @@ import { Layout, Message as Chat } from '@components/index';
 import { useMutation, useUser } from '@libs/client';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
@@ -27,7 +26,9 @@ interface MessageForm {
 const Stream: NextPage = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
-  const { data, mutate } = useSWR<StreamResponse>(router.query.id ? `/api/streams/${router.query.id}` : null);
+  const { data, mutate } = useSWR<StreamResponse>(router.query.id ? `/api/streams/${router.query.id}` : null, {
+    refreshInterval: 1000,
+  });
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const [send, { loading: sendLoading, data: sendData, error: sendError }] = useMutation(
     `/api/streams/${router.query.id}/message`,
@@ -36,14 +37,20 @@ const Stream: NextPage = () => {
   const onValid = (data: MessageForm) => {
     if (!data || sendLoading) return;
     reset();
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [...prev.stream.messages, { id: Date.now(), message: data.message, user: { ...user } }],
+          },
+        } as any),
+      false,
+    );
     send(data);
   };
-
-  useEffect(() => {
-    if (data && data.ok) {
-      mutate();
-    }
-  }, [data, mutate]);
 
   return (
     <Layout canGoBack>
