@@ -1,15 +1,23 @@
-import { Stream } from '.prisma/client';
-import { Layout, Message } from '@components/index';
-import { useMutation } from '@libs/client';
+import { Message, Stream, User } from '.prisma/client';
+import { Layout, Message as Chat } from '@components/index';
+import { useMutation, useUser } from '@libs/client';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
+interface MessageWithUser extends Message {
+  user: Pick<User, 'id' | 'avatar'>;
+}
+
+interface StreamWithMessages extends Stream {
+  messages: Pick<MessageWithUser, 'id' | 'message' | 'user'>[];
+}
+
 interface StreamResponse {
   ok: boolean;
-  stream: Stream;
+  stream: StreamWithMessages;
 }
 
 interface MessageForm {
@@ -18,7 +26,8 @@ interface MessageForm {
 
 const Stream: NextPage = () => {
   const router = useRouter();
-  const { data } = useSWR<StreamResponse>(router.query.id ? `/api/streams/${router.query.id}` : null);
+  const { user, isLoading } = useUser();
+  const { data, mutate } = useSWR<StreamResponse>(router.query.id ? `/api/streams/${router.query.id}` : null);
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const [send, { loading: sendLoading, data: sendData, error: sendError }] = useMutation(
     `/api/streams/${router.query.id}/message`,
@@ -29,6 +38,12 @@ const Stream: NextPage = () => {
     reset();
     send(data);
   };
+
+  useEffect(() => {
+    if (data && data.ok) {
+      mutate();
+    }
+  }, [data, mutate]);
 
   return (
     <Layout canGoBack>
@@ -42,9 +57,9 @@ const Stream: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="py-10 pb-16 h-[50vh] overflow-y-scroll  px-4 space-y-4">
-            <Message message="Hi how much are you selling them for?" />
-            <Message message="I want ￦20,000" reversed />
-            <Message message="미쳤어" />
+            {data?.stream?.messages.map((message) => {
+              return <Chat key={message.id} message={message.message} reversed={user?.id === message.user.id} />;
+            })}
           </div>
           <div className="fixed py-2 bg-white bottom-0 inset-x-0">
             <form onSubmit={handleSubmit(onValid)} className="flex relative max-w-md items-center  w-full mx-auto">
