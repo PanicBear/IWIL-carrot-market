@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       });
     case 'POST':
       const {
-        body: { email, phone, name },
+        body: { email, phone, name, avatarId },
         session: { user },
       } = req;
       const currentUser = await client.user.findUnique({
@@ -36,21 +36,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
             id: true,
           },
         });
-        if (isExists) {
-          return res.json({
-            ok: false,
-            error: 'Email already exists',
+        if (!isExists) {
+          await client.user.update({
+            where: {
+              id: user?.id,
+            },
+            data: {
+              email,
+            },
           });
         }
-        await client.user.update({
-          where: {
-            id: user?.id,
-          },
-          data: {
-            email,
-          },
-        });
-        return res.json({ ok: true });
       }
       if (phone && currentUser?.phone !== phone) {
         const isExists = await client.user.findFirst({
@@ -61,21 +56,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
             id: true,
           },
         });
-        if (isExists) {
-          return res.json({
-            ok: false,
-            error: 'Phone number in use',
+        if (!isExists) {
+          await client.user.update({
+            where: {
+              id: user?.id,
+            },
+            data: {
+              phone,
+            },
           });
         }
-        await client.user.update({
-          where: {
-            id: user?.id,
-          },
-          data: {
-            phone,
-          },
-        });
-        return res.json({ ok: true, message: 'not changed' });
       }
       if (name && currentUser?.name !== name) {
         await client.user.update({
@@ -86,7 +76,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
             name,
           },
         });
-        return res.json({ ok: true, message: 'not changed' });
+      }
+      if (avatarId) {
+        console.log(avatarId);
+        await client.user.update({
+          where: {
+            id: user?.id,
+          },
+          data: {
+            avatar: avatarId,
+          },
+        });
+        res.json({ ok: true });
       }
       return res.json({ ok: true });
     default:

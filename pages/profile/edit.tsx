@@ -1,6 +1,5 @@
 import { Button, Input, Layout } from '@components/index';
 import { useMutation, useUser } from '@libs/client';
-import useImage from '@libs/client/useImage';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,7 +20,6 @@ interface EditProfileResponse {
 const EditProfile: NextPage = () => {
   const { user } = useUser();
   const [editProfile, { loading, data }] = useMutation<EditProfileResponse>('/api/users/me');
-  const [changeAvatar, { loading: avatarLoading, data: avatarData }] = useImage();
   const {
     register,
     handleSubmit,
@@ -38,9 +36,17 @@ const EditProfile: NextPage = () => {
     if (!email && !phone && !name) {
       return setError('formErrors', { message: 'Email or Phone number is required. Choose one, not both.' });
     }
-    if (avatar && avatar.length) {
-      const file = avatar[0];
-      changeAvatar(file);
+    if (avatar && avatar.length && user) {
+      const form = new FormData();
+      form.append('file', avatar[0], user.id + '');
+      form.append('upload_preset', 'dpsqflqu');
+      const { public_id: avatarId } = await (
+        await fetch('https://api.cloudinary.com/v1_1/dydish47p/image/upload', {
+          method: 'POST',
+          body: form,
+        })
+      ).json();
+      editProfile({ email, phone, name, avatarId });
     }
     editProfile({ email, phone, name });
   };
@@ -49,21 +55,22 @@ const EditProfile: NextPage = () => {
     setValue('name', user?.name ?? '');
     setValue('email', user?.email ?? '');
     setValue('phone', user?.phone ?? '');
-  }, [user, setValue]);
+    if (user?.avatar && !avatarPreview)
+      setAvatarPreview(`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${user?.avatar}`);
+  }, [user, setValue, avatarPreview]);
 
   useEffect(() => {
     if (data && !data.ok) {
       setError('formErrors', { message: data?.error });
     }
   }, [data, setError]);
+
   useEffect(() => {
     if (avatar && avatar.length) {
       const file = avatar[0];
       setAvatarPreview(URL.createObjectURL(file));
     }
   }, [avatar]);
-
-  console.log(avatarData);
 
   return (
     <Layout title="Edit Profile" canGoBack>
