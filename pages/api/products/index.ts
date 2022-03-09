@@ -21,7 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       break;
     case 'POST':
       const {
-        body: { name, price, description },
+        body: { name, price, description, photoId },
         session: { user },
       } = req;
       const product = await client.product.create({
@@ -29,7 +29,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           name,
           price: +price,
           description,
-          imageUrl: 'not implemented yet',
+          imageUrl: photoId ?? null,
           user: {
             connect: {
               id: user?.id,

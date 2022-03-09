@@ -5,15 +5,23 @@ interface ItemProps {
   id: number;
   price: number;
   hearts: number;
+  imageUrl: string;
   comments: number;
 }
 
-export default function Item({ title, id, price, hearts, comments }: ItemProps) {
+export default function Item({ title, id, price, hearts, imageUrl, comments }: ItemProps) {
   return (
     <Link href={`/products/${id}`}>
       <a className="flex px-4 py-8 cursor-pointer justify-between">
         <div className="flex space-x-4">
-          <div className="w-20 h-20 bg-gray-400 rounded-md" />
+          {imageUrl ? (
+            <img
+              src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_80,g_face/v1646826552/${imageUrl}`}
+              className="w-20 h-20 bg-gray-400 rounded-md"
+            />
+          ) : (
+            <div className="w-20 h-20 bg-gray-400 rounded-md" />
+          )}
           <div className="pt-2 flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
             <span className="font-medium mt-1 text-gray-900">₩{price}</span>
