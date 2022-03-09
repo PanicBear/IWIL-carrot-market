@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 interface ReviewWithUser extends Review {
-  createdBy: User;
+  createdBy: Pick<User, 'id' | 'name' | 'avatar'>;
 }
 
 interface ReviewsResponse {
@@ -107,7 +107,14 @@ const Profile: NextPage = () => {
           return (
             <div key={review.id} className="mt-12">
               <div className="flex space-x-4 items-center">
-                <div className="w-12 h-12 rounded-full bg-slate-500" />
+                {review.createdBy.avatar ? (
+                  <img
+                    src={`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${review.createdBy.avatar}`}
+                    className="w-12 h-12 rounded-full bg-slate-500"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-slate-500" />
+                )}
                 <div>
                   <h4 className="text-sm font-bold text-gray-800">{review.createdBy.name}</h4>
                   <div className="flex items-center">

@@ -34,7 +34,7 @@ const EditProfile: NextPage = () => {
   const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
     if (!email && !phone && !name) {
-      return setError('formErrors', { message: 'Email or Phone number is required. Choose one, not both.' });
+      return setError('formErrors', { message: 'Email or Phone number is required' });
     }
     if (avatar && avatar.length && user) {
       const form = new FormData();

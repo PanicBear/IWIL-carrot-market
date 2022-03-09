@@ -1,10 +1,10 @@
 import { Product, User } from '.prisma/client';
 import { Button, Layout } from '@components/index';
-import { cls, useMutation, useUser } from '@libs/client';
+import { cls, useMutation } from '@libs/client';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 
 interface ProductWithUser extends Product {
   user: User;
@@ -37,9 +37,23 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <div className="h-96 bg-slate-300" />
-          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-slate-300" />
+          {data?.product.imageUrl ? (
+            <img
+              src={`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${data.product.imageUrl}`}
+              className="mx-auto h-96 bg-slate-300"
+            />
+          ) : (
+            <div className="h-96 bg-slate-300" />
+          )}
+          <div className="flex cursor-pointer py-3 border-b items-center space-x-3">
+            {data?.product.user.avatar ? (
+              <img
+                src={`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${data.product.user.avatar}`}
+                className="w-12 h-12 rounded-full bg-slate-300"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-slate-300" />
+            )}
             <div>
               {data ? (
                 <>
