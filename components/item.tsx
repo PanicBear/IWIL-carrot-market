@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface ItemProps {
@@ -15,9 +16,12 @@ export default function Item({ title, id, price, hearts, imageUrl, comments }: I
       <a className="flex px-4 py-8 cursor-pointer justify-between">
         <div className="flex space-x-4">
           {imageUrl ? (
-            <img
-              src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_80,g_face/v1646826552/${imageUrl}`}
-              className="w-20 h-20 bg-gray-400 rounded-md"
+            <Image
+              src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_80,h_80/v1646886648/${imageUrl}`}
+              className="rounded-md -z-10"
+              height={80}
+              width={80}
+              alt="product thumbnail"
             />
           ) : (
             <div className="w-20 h-20 bg-gray-400 rounded-md" />

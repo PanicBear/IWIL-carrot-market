@@ -26,8 +26,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
                 },
               },
             },
-            take: 10,
-            skip: 20,
+            // take: 10,
+            // skip: 20,
           },
           _count: {
             select: {

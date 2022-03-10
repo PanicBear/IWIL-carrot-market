@@ -2,6 +2,7 @@ import { Answer, Post, User } from '.prisma/client';
 import { Layout, TextArea } from '@components/index';
 import { cls, useMutation } from '@libs/client';
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -79,6 +80,8 @@ const CommunityPostDetail: NextPage = () => {
     }
   }, [answerData, reset, mutate]);
 
+  console.log(data);
+
   return (
     <Layout canGoBack>
       <div>
@@ -86,7 +89,17 @@ const CommunityPostDetail: NextPage = () => {
           동네질문
         </span>
         <div className="flex mb-3 px-4 cursor-pointer pb-3 items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-slate-300" />
+          {data?.post?.user.avatar ? (
+            <Image
+              src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_40,h_40/v1646886648/${data.post.user.avatar}`}
+              className="rounded-full -z-10"
+              width={40}
+              height={40}
+              alt="writer avatar"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-slate-300" />
+          )}
           <div>
             <p className="text-sm font-medium text-gray-700">{data ? `${data.post?.user.name}` : 'Loading'}</p>
             <Link href={`/users/profiles/${data?.post?.user.id}`}>
@@ -143,7 +156,17 @@ const CommunityPostDetail: NextPage = () => {
           {data?.post?.answers.map((answer) => {
             return (
               <div key={answer.id} className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-slate-200 rounded-full" />
+                {answer.user.avatar ? (
+                  <Image
+                    src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_32,h_32/v1646886648/${answer.user.avatar}`}
+                    className="bg-slate-200 rounded-full -z-10"
+                    width={32}
+                    height={32}
+                    alt="comment avatar"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-slate-200 rounded-full" />
+                )}
                 <div>
                   <span className="text-sm block font-medium text-gray-700">{answer.user.name}</span>
                   <span className="text-xs text-gray-500 block ">{answer.createdAt}</span>
