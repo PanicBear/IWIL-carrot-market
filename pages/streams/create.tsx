@@ -36,7 +36,7 @@ const Create: NextPage = () => {
     <Layout canGoBack title="Go Live">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
         <Input
-          register={register('name', { required: true, valueAsNumber: true })}
+          register={register('name', { required: true, setValueAs: (value) => value + '' })}
           type="text"
           name="name"
           label="Name"

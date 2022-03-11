@@ -18,11 +18,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         body: { name, price, description },
         session: { user },
       } = req;
+      const {
+        result: {
+          uid,
+          rtmps: { url, streamKey },
+        },
+      } = await (
+        await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/stream/live_inputs`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${process.env.CF_STREAM_TOKEN}`,
+          },
+          body: `{"meta": {"name":"${name}"},"recording": { "mode": "automatic", "timeoutSeconds": 10}}`,
+        })
+      ).json();
       const stream = await client.stream.create({
         data: {
           name,
           price: +price,
           description,
+          cloudflareId: uid,
+          cloudflareUrl: url,
+          cloudflareKey: streamKey,
           user: {
             connect: {
               id: user?.id,
