@@ -7,7 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     case 'GET':
       const streams = await client.stream.findMany({
         take: 10,
-        skip: 20,
+        skip: 0,
       });
       return res.json({
         ok: true,
