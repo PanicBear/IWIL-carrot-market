@@ -29,6 +29,7 @@ model User {
   purchase        Purchase[]
   streams         Stream[]
   messages        Message[]
+  chatrooms       ChatRoom[]
 }
 
 model Token {
@@ -41,18 +42,20 @@ model Token {
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   imageUrl    String
   name        String
   price       Int
-  description String     @db.MediumText
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  description String       @db.MediumText
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   favs        Fav[]
   sales       Sale[]
   purchase    Purchase[]
+  chatRooms   ChatRoom[]
+  state       ProductState @default(onList)
 }
 
 model Fav {
@@ -147,12 +150,31 @@ model Stream {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  message   String   @db.MediumText
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId  Int
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  message    String    @db.MediumText
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  stream     Stream?   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId   Int?
+  chatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId Int?
+}
+
+model ChatRoom {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  buyer     User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  buyerId   Int
+}
+
+enum ProductState {
+  onList
+  booked
+  sold
 }
