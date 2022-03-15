@@ -32,7 +32,6 @@ const ItemDetail: NextPage = () => {
   ] = useMutation<{ chatRoomId: number; ok: boolean }>(
     `/api/products/${router.query.id}/chat`
   );
-
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     if (!data) return;
@@ -58,14 +57,19 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <div className="relative pb-80">
-            <Image
-              src={`https://res.cloudinary.com/dydish47p/image/upload/v1646886648/${data?.product.imageUrl}`}
-              className="object-contain -z-10"
-              layout="fill"
-              alt="product photo"
-            />
-          </div>
+          {data ? (
+            <div className="relative pb-80">
+              <Image
+                src={`https://res.cloudinary.com/dydish47p/image/upload/v1646886648/${data?.product.imageUrl}`}
+                className="object-contain -z-10"
+                layout="fill"
+                alt="product photo"
+                priority={true}
+              />
+            </div>
+          ) : (
+            <div className="h-80 bg-slate-300" />
+          )}
           <div className="flex cursor-pointer py-3 border-b items-center space-x-3">
             {data?.product.user.avatar ? (
               <Image

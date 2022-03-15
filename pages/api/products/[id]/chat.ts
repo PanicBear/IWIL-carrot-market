@@ -20,6 +20,13 @@ async function handler(
           userId: true,
         },
       });
+      if (user && user.id === seller?.userId) {
+        res.json({
+          ok: false,
+          message: "seller can't chat one's self",
+        });
+      }
+
       let chatRoom = await client.chatRoom.findFirst({
         where: {
           product: {
