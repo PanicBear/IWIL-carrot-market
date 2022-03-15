@@ -1,10 +1,13 @@
-import type { ResponseType } from '@customTypes/index';
-import { client, withApiSession, withHandler } from '@libs/server/index';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { ResponseType } from "@customTypes/index";
+import { client, withApiSession, withHandler } from "@libs/server/index";
+import { NextApiRequest, NextApiResponse } from "next";
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   switch (req.method) {
-    case 'GET':
+    case "POST":
       const {
         query: { id },
         session: { user },
@@ -53,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           select: {
             id: true,
           },
-        }),
+        })
       );
       res.json({
         ok: true,
@@ -61,20 +64,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         isWondered,
       });
       break;
-    case 'POST':
-    case 'PUT':
-    case 'DELETE':
+    case "POST":
+    case "PUT":
+    case "DELETE":
     default:
       res.json({
         ok: false,
-        message: 'Method not allowed',
+        message: "Method not allowed",
       });
   }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ["POST"],
     handler,
-  }),
+  })
 );
