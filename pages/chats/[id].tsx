@@ -1,21 +1,101 @@
-import type { NextPage } from 'next';
 import { Layout, Message } from '@components/index';
+import { useMutation, useUser } from '@libs/client';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import useSWR from 'swr';
+
+interface ChatRoomDetail {
+  id: 2;
+  buyer: {
+    id: 2;
+    avatar: string;
+    name: string;
+  };
+  product: {
+    id: number;
+    name: string;
+    state: 'onList' | 'booked' | 'sold';
+    user: {
+      id: number;
+      avatar: string;
+      name: string;
+    };
+  };
+  messages: [
+    {
+      id: number;
+      message: string;
+      chatRoomId: number;
+      user: {
+        id: number;
+        name: string;
+        avatar: string;
+      };
+    },
+  ];
+}
+
+interface MessageResponse {
+  ok: boolean;
+  chatRoom: ChatRoomDetail;
+}
+interface MessageForm {
+  message: string;
+}
 
 const ChatDetail: NextPage = () => {
+  const router = useRouter();
+  const { user, isLoading } = useUser();
+  const { data, error, mutate } = useSWR<MessageResponse>(router.query.id ? `/api/chats/${router.query.id}` : null);
+  const [sendMessage, { loading: messageLoading, data: messageData, error: messageError }] = useMutation(
+    router.query.id ? `/api/chats/${router.query.id}` : '',
+  );
+  const { register, handleSubmit } = useForm<MessageForm>();
+
+  const onValid = (data: MessageForm) => {
+    sendMessage(data);
+  };
+
+  useEffect(() => {
+    if (messageData && router.query.id) {
+      mutate();
+    }
+  }, [messageData, mutate, router.query.id]);
+
   return (
-    <Layout canGoBack title="Steve">
+    <Layout
+      canGoBack
+      title={
+        !isLoading && data
+          ? `${data.chatRoom.buyer.id !== user?.id ? data.chatRoom.buyer.name : data.chatRoom.product.user.name}`
+          : 'Loading'
+      }
+    >
       <div className="py-10 pb-16 px-4 space-y-4">
-        <Message message="Hi how much are you selling them for?" />
-        <Message message="I want ￦20,000" reversed />
-        <Message message="미쳤어" />
+        {data?.chatRoom.messages.map((message) => {
+          return (
+            <Message
+              key={message.id}
+              message={message.message}
+              reversed={message.user.id === user?.id}
+              avatarUrl={message.user.avatar}
+            />
+          );
+        })}
         <form className="fixed py-2 bg-white  bottom-0 inset-x-0">
           <div className="flex relative max-w-md items-center  w-full mx-auto">
             <input
+              {...register('message', { maxLength: 140, required: true })}
               type="text"
               className="shadow-sm rounded-full w-full border-gray-300 focus:ring-orange-500 focus:outline-none pr-12 focus:border-orange-500"
             />
             <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-              <button className="flex focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 text-sm text-white">
+              <button
+                onClick={handleSubmit(onValid)}
+                className="flex focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 text-sm text-white"
+              >
                 &rarr;
               </button>
             </div>

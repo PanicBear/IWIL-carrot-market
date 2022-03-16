@@ -8,7 +8,6 @@ interface MessageProps {
 }
 
 export default function Message({ message, avatarUrl, reversed }: MessageProps) {
-  console.log(avatarUrl);
   return (
     <div className={cls('flex items-start space-x-2', reversed ? 'flex-row-reverse space-x-reverse' : '')}>
       {avatarUrl ? (

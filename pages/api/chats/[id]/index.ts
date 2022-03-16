@@ -15,19 +15,44 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
         select: {
           id: true,
-          buyerId: true,
+          buyer: {
+            select: {
+              id: true,
+              avatar: true,
+              name: true,
+            },
+          },
           product: {
             select: {
               id: true,
               name: true,
-              userId: true,
               state: true,
+              user: {
+                select: {
+                  id: true,
+                  avatar: true,
+                  name: true,
+                },
+              },
             },
           },
-          messages: true,
+          messages: {
+            select: {
+              id: true,
+              message: true,
+              chatRoomId: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatar: true,
+                },
+              },
+            },
+          },
         },
       });
-      if (chatRoom && chatRoom.buyerId !== user?.id && chatRoom.product.userId !== user?.id) {
+      if (chatRoom && chatRoom.buyer.id !== user?.id && chatRoom.product.user.id !== user?.id) {
         return res.json({
           ok: false,
           message: 'only buyer and seller can join chatRoom',
