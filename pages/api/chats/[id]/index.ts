@@ -1,56 +1,41 @@
-import type { ResponseType } from "@customTypes/index";
-import { client, withApiSession, withHandler } from "@libs/server/index";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { ResponseType } from '@customTypes/index';
+import { client, withApiSession, withHandler } from '@libs/server/index';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   switch (req.method) {
-    case "GET":
+    case 'GET':
       const {
+        query: { id },
         session: { user },
       } = req;
-      const chatRooms = await client.chatRoom.findMany({
+      const chatRoom = await client.chatRoom.findUnique({
         where: {
-          OR: {
-            product: {
-              userId: user?.id,
-            },
-            buyerId: user?.id,
-          },
+          id: +id,
         },
         select: {
           id: true,
-          buyer: {
+          buyerId: true,
+          product: {
             select: {
               id: true,
               name: true,
-              avatar: true,
+              userId: true,
+              state: true,
             },
           },
-          product: {
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  avatar: true,
-                },
-              },
-            },
-          },
-          messages: {
-            orderBy: {
-              createdAt: "desc",
-            },
-            take: 1,
-          },
+          messages: true,
         },
       });
+      if (chatRoom && chatRoom.buyerId !== user?.id && chatRoom.product.userId !== user?.id) {
+        return res.json({
+          ok: false,
+          message: 'only buyer and seller can join chatRoom',
+        });
+      }
       return res.json({
         ok: true,
-        chatRooms,
+        chatRoom,
       });
     default:
       return res.json({
@@ -62,7 +47,7 @@ async function handler(
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ['GET'],
     handler,
-  })
+  }),
 );

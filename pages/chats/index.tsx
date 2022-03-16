@@ -1,12 +1,12 @@
-import type { NextPage } from "next";
-import Link from "next/link";
-import { Layout } from "@components/index";
-import useSWR from "swr";
-import { useUser } from "@libs/client";
-import { Message, User } from "@prisma/client";
-import Image from "next/image";
+import type { NextPage } from 'next';
+import Link from 'next/link';
+import { Layout } from '@components/index';
+import useSWR from 'swr';
+import { useUser } from '@libs/client';
+import { Message, User } from '@prisma/client';
+import Image from 'next/image';
 
-type UserInfo = Pick<User, "id" | "name" | "avatar">;
+type UserInfo = Pick<User, 'id' | 'name' | 'avatar'>;
 
 interface ChatRoom {
   id: number;
@@ -24,18 +24,15 @@ interface ChatRoomResult {
 
 const Chats: NextPage = () => {
   const { user, isLoading } = useUser();
-  const { data, error } = useSWR<ChatRoomResult>(
-    user?.id ? `/api/chats/${user.id}` : null
-  );
+  const { data, error } = useSWR<ChatRoomResult>(user?.id ? `/api/chats` : null);
   console.log(data);
   return (
     <Layout hasTabBar title="채팅">
       <div className="divide-y-[1px] ">
         {data?.chatRooms.map((chatRoom) => {
-          const opponent: UserInfo =
-            chatRoom.buyer.id !== user?.id
-              ? chatRoom.buyer
-              : chatRoom.product.user;
+          const opponent: UserInfo = chatRoom.buyer.id !== user?.id ? chatRoom.buyer : chatRoom.product.user;
+          console.log(opponent);
+          console.log(chatRoom.messages[0]);
           return (
             <Link href={`/chats/${chatRoom.id}`} key={chatRoom.id}>
               <a className="flex px-4 cursor-pointer py-3 items-center space-x-3">
@@ -49,7 +46,7 @@ const Chats: NextPage = () => {
                 <div>
                   <p className="text-gray-700">{opponent.name}</p>
                   <p className="text-sm  text-gray-500">
-                    {chatRoom.messages[0] ?? "나눈 대화가 없습니다"}
+                    {chatRoom.messages[0] ? chatRoom.messages[0].message : '나눈 대화가 없습니다'}
                   </p>
                 </div>
               </a>
