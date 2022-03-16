@@ -3,12 +3,13 @@ import { client, withApiSession, withHandler } from '@libs/server/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+  const {
+    query: { id },
+    body: { message },
+    session: { user },
+  } = req;
   switch (req.method) {
     case 'GET':
-      const {
-        query: { id },
-        session: { user },
-      } = req;
       const chatRoom = await client.chatRoom.findUnique({
         where: {
           id: +id,
@@ -62,6 +63,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         ok: true,
         chatRoom,
       });
+    case 'POST':
+      if (!user) {
+        return res.json({
+          ok: false,
+          message: 'login required',
+        });
+      }
+      const newMsg = await client.message.create({
+        data: {
+          message,
+          chatRoomId: +id,
+          userId: user.id,
+        },
+      });
+      return res.json({
+        ok: true,
+        message: newMsg,
+      });
     default:
       return res.json({
         ok: false,
@@ -72,7 +91,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ['GET', 'POST'],
     handler,
   }),
 );

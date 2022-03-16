@@ -48,14 +48,18 @@ interface MessageForm {
 const ChatDetail: NextPage = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
-  const { data, error, mutate } = useSWR<MessageResponse>(router.query.id ? `/api/chats/${router.query.id}` : null);
+  const { data, error, mutate, isValidating } = useSWR<MessageResponse>(
+    router.query.id ? `/api/chats/${router.query.id}` : null,
+  );
   const [sendMessage, { loading: messageLoading, data: messageData, error: messageError }] = useMutation(
     router.query.id ? `/api/chats/${router.query.id}` : '',
   );
-  const { register, handleSubmit } = useForm<MessageForm>();
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
 
   const onValid = (data: MessageForm) => {
+    if (messageLoading) return;
     sendMessage(data);
+    reset();
   };
 
   useEffect(() => {
@@ -64,26 +68,32 @@ const ChatDetail: NextPage = () => {
     }
   }, [messageData, mutate, router.query.id]);
 
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [isValidating]);
+
   return (
     <Layout
       canGoBack
       title={
-        !isLoading && data
+        !isLoading && data?.chatRoom
           ? `${data.chatRoom.buyer.id !== user?.id ? data.chatRoom.buyer.name : data.chatRoom.product.user.name}`
           : 'Loading'
       }
     >
       <div className="py-10 pb-16 px-4 space-y-4">
-        {data?.chatRoom.messages.map((message) => {
-          return (
-            <Message
-              key={message.id}
-              message={message.message}
-              reversed={message.user.id === user?.id}
-              avatarUrl={message.user.avatar}
-            />
-          );
-        })}
+        {data?.chatRoom
+          ? data?.chatRoom.messages.map((message) => {
+              return (
+                <Message
+                  key={message.id}
+                  message={message.message}
+                  reversed={message.user.id === user?.id}
+                  avatarUrl={message.user.avatar}
+                />
+              );
+            })
+          : null}
         <form className="fixed py-2 bg-white  bottom-0 inset-x-0">
           <div className="flex relative max-w-md items-center  w-full mx-auto">
             <input
