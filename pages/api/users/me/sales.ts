@@ -6,7 +6,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   const {
     session: { user },
   } = req;
-  const sales = await client.purchase.findMany({
+  const sales = await client.sale.findMany({
     where: {
       userId: user?.id,
     },
