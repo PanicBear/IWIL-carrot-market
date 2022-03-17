@@ -65,7 +65,7 @@ const Upload: NextPage = () => {
               <div className="relative py-24 px-60">
                 <Image
                   src={photoPreview}
-                  className="rounded-md object-contain -z-10"
+                  className="rounded-md object-contain "
                   layout="fill"
                   alt="product preview image"
                 />

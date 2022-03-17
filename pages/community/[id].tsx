@@ -92,7 +92,7 @@ const CommunityPostDetail: NextPage = () => {
           {data?.post?.user.avatar ? (
             <Image
               src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_40,h_40/v1646886648/${data.post.user.avatar}`}
-              className="rounded-full -z-10"
+              className="rounded-full "
               width={40}
               height={40}
               alt="writer avatar"
@@ -159,7 +159,7 @@ const CommunityPostDetail: NextPage = () => {
                 {answer.user.avatar ? (
                   <Image
                     src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_32,h_32/v1646886648/${answer.user.avatar}`}
-                    className="bg-slate-200 rounded-full -z-10"
+                    className="bg-slate-200 rounded-full "
                     width={32}
                     height={32}
                     alt="comment avatar"

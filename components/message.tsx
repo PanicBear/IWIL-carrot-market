@@ -13,7 +13,7 @@ export default function Message({ message, avatarUrl, reversed }: MessageProps) 
       {avatarUrl ? (
         <Image
           src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_32,h_32,g_face/v1646886648/${avatarUrl}`}
-          className="rounded-full bg-slate-400 -z-10"
+          className="rounded-full bg-slate-400 "
           width={32}
           height={32}
           alt="message avatar"

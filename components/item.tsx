@@ -18,7 +18,7 @@ export default function Item({ title, id, price, hearts, imageUrl, comments }: I
           {imageUrl ? (
             <Image
               src={`https://res.cloudinary.com/dydish47p/image/upload/c_thumb,w_80,h_80/v1646886648/${imageUrl}`}
-              className="rounded-md -z-10"
+              className="rounded-md"
               height={80}
               width={80}
               alt="product thumbnail"
