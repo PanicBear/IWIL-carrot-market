@@ -3,7 +3,7 @@ import { Item } from '@components/index';
 import { ProductWithCount } from '@customTypes/index';
 import useSWR from 'swr';
 
-interface ProductListProds {
+interface ProductListProps {
   kind: 'favs' | 'sales' | 'purchases';
 }
 
@@ -16,7 +16,7 @@ interface ProductListResponse {
   [key: string]: Record[];
 }
 
-export default function ProductList({ kind }: ProductListProds) {
+export default function ProductList({ kind }: ProductListProps) {
   const { data } = useSWR<ProductListResponse>(`/api/users/me/${kind}`);
   return data ? (
     <>
@@ -27,6 +27,7 @@ export default function ProductList({ kind }: ProductListProds) {
           title={record.product.name}
           price={record.product.price}
           hearts={record.product._count.favs}
+          imageUrl={record.product.imageUrl}
           comments={0}
         />
       ))}

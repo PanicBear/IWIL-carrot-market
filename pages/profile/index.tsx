@@ -2,6 +2,7 @@ import { Review, User } from '.prisma/client';
 import { Layout } from '@components/index';
 import { cls, useUser } from '@libs/client';
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 
@@ -23,9 +24,12 @@ const Profile: NextPage = () => {
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
           {user?.avatar ? (
-            <img
+            <Image
               src={`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${user?.avatar}`}
-              className="w-16 h-16 bg-slate-500 rounded-full"
+              className="bg-slate-500 rounded-full"
+              height={64}
+              width={64}
+              alt="user avatar"
             />
           ) : (
             <div className="w-16 h-16 bg-slate-500 rounded-full" />
@@ -108,9 +112,12 @@ const Profile: NextPage = () => {
             <div key={review.id} className="mt-12">
               <div className="flex space-x-4 items-center">
                 {review.createdBy.avatar ? (
-                  <img
+                  <Image
                     src={`https://res.cloudinary.com/dydish47p/image/upload/v1646815874/${review.createdBy.avatar}`}
-                    className="w-12 h-12 rounded-full bg-slate-500"
+                    className="rounded-full"
+                    width="48"
+                    height="48"
+                    alt="reviewer avatar"
                   />
                 ) : (
                   <div className="w-12 h-12 rounded-full bg-slate-500" />
