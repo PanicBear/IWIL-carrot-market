@@ -37,9 +37,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           },
         },
       });
+      const sale = await client.sale.create({
+        data: {
+          product: {
+            connect: {
+              id: product.id,
+            },
+          },
+          user: {
+            connect: {
+              id: product.userId,
+            },
+          },
+        },
+      });
       res.json({
         ok: true,
         product,
+        sale: Boolean(sale),
       });
       break;
     case 'PUT':
