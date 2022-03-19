@@ -20,7 +20,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
       <header
         className={cls(
           !canGoBack ? 'justify-center' : '',
-          'bg-white w-full max-w-xl text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center',
+          'bg-white w-full max-w-xl text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center z-10',
         )}
       >
         {canGoBack ? (

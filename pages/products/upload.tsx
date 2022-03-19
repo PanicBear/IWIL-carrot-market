@@ -17,6 +17,7 @@ interface UploadProductForm {
 interface UploadProductMutation {
   ok: boolean;
   product: Product;
+  sale: boolean;
 }
 
 const Upload: NextPage = () => {
@@ -28,7 +29,7 @@ const Upload: NextPage = () => {
   const photo = watch('photo');
 
   useEffect(() => {
-    if (data?.ok) router.replace(`/products/${data.product.id}`);
+    if (data?.ok && data.sale) router.replace(`/products/${data.product.id}`);
   }, [data, router]);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const Upload: NextPage = () => {
               <div className="relative py-24 px-60">
                 <Image
                   src={photoPreview}
-                  className="rounded-md object-contain -z-10"
+                  className="rounded-md object-contain "
                   layout="fill"
                   alt="product preview image"
                 />
