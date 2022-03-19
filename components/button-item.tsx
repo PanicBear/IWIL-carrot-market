@@ -1,4 +1,4 @@
-import { Product, ProductState } from '.prisma/client';
+import { ProductState } from '.prisma/client';
 import { useMutation, useUser } from '@libs/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -74,7 +74,7 @@ export default function ButtonItem({ title, id, price, hearts, imageUrl, state, 
         {state === 'onList' && (
           <button
             onClick={() => onSetBookedClick('booked')}
-            className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md"
+            className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
           >
             {loading ? 'Loading...' : '예약중으로 변경하기'}
           </button>
@@ -82,14 +82,14 @@ export default function ButtonItem({ title, id, price, hearts, imageUrl, state, 
         {state === 'booked' && (
           <button
             onClick={() => onSetProductStateClick('onList')}
-            className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md"
+            className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
           >
             {loading ? 'Loading...' : '판매중으로 변경하기'}
           </button>
         )}
         <button
           onClick={() => onSetProductStateClick('sold')}
-          className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md"
+          className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
         >
           {loading ? 'Loading...' : '거래완료로 변경하기'}
         </button>
