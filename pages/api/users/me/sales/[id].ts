@@ -14,6 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         body: { id, kind },
         session: { user },
       } = req;
+      console.log(kind);
       const isSeller = Boolean(
         await client.product.findFirst({
           where: {
@@ -22,16 +23,38 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           },
         }),
       );
-      if (isSeller) {
+      if (!isSeller) {
         return res.json({ ok: false, message: 'only seller can change state with product' });
       }
       switch (kind as ProductState) {
         case 'onList':
-          return res.json({ ok: true });
-        case 'booked':
-          return res.json({ ok: true });
+          const product = await client.product.update({
+            where: {
+              id: +id,
+            },
+            data: {
+              state: 'onList',
+            },
+          });
+          if (product) {
+            const isDeleted = await client.purchase.deleteMany({
+              where: {
+                productId: product.id,
+              },
+            });
+            return res.json({ ok: Boolean(isDeleted) });
+          }
+          return res.json({ ok: false });
         case 'sold':
-          return res.json({ ok: true });
+          const isUpdated = await client.product.update({
+            where: {
+              id: +id,
+            },
+            data: {
+              state: 'sold',
+            },
+          });
+          return res.json({ ok: Boolean(isUpdated) });
         default:
           return res.json({
             ok: false,
