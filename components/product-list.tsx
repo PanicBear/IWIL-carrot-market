@@ -18,14 +18,13 @@ interface ProductListResponse {
 }
 
 function productStatehandler(state: ProductState, kind: 'favs' | 'sales' | 'purchases') {
-  if (kind === 'purchases') return '구매완료';
   switch (state) {
     case 'onList':
       return '판매중';
     case 'booked':
-      return '예약완료';
+      return kind === 'purchases' ? '구매중' : '예약완료';
     case 'sold':
-      return '판매완료';
+      return kind === 'purchases' ? '구매완료' : '판매완료';
   }
 }
 
