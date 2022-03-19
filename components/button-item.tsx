@@ -3,6 +3,8 @@ import { useMutation, useUser } from '@libs/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import useSWR from 'swr';
 
 interface ItemProps {
   title: string;
@@ -17,16 +19,27 @@ interface ItemProps {
 export default function ButtonItem({ title, id, price, hearts, imageUrl, state, comments }: ItemProps) {
   const router = useRouter();
   const { user } = useUser();
+  const { mutate } = useSWR(`/api/users/me/sales`);
   const [setProductState, { loading, data, error }] = useMutation(`/api/users/me/sales/${id}`);
 
-  const onSetProductStateClick = (kind: ProductState) => {
-    if (!user || loading || error) return;
-    setProductState({ id: user.id, kind });
-  };
-  const onSetBookedClick = (kind: ProductState) => {
+  const onSetBookedClick = () => {
     if (!user || loading || error) return;
     router.push(`/profile/sold/${id}`);
   };
+  const onSetOnListClick = () => {
+    if (!user || !id || !state || loading || error) return;
+    setProductState({ id, kind: 'onList' });
+  };
+  const onSetSoldClick = () => {
+    if (!user || !id || !state || loading || error) return;
+    setProductState({ id, kind: 'sold' });
+  };
+
+  useEffect(() => {
+    if (data) {
+      mutate();
+    }
+  }, [mutate, data]);
 
   return (
     <div className="py-8 pb-4 space-y-4 px-4">
@@ -73,26 +86,36 @@ export default function ButtonItem({ title, id, price, hearts, imageUrl, state, 
       <div className="flex justify-around h-12 divide-x-[1px]">
         {state === 'onList' && (
           <button
-            onClick={() => onSetBookedClick('booked')}
+            onClick={onSetBookedClick}
             className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
           >
             {loading ? 'Loading...' : '예약중으로 변경하기'}
           </button>
         )}
         {state === 'booked' && (
+          <>
+            <button
+              onClick={onSetOnListClick}
+              className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
+            >
+              {loading ? 'Loading...' : '판매중으로 변경하기'}
+            </button>
+            <button
+              onClick={onSetSoldClick}
+              className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
+            >
+              {loading ? 'Loading...' : '거래완료로 변경하기'}
+            </button>
+          </>
+        )}
+        {state === 'sold' && (
           <button
-            onClick={() => onSetProductStateClick('onList')}
+            onClick={onSetOnListClick}
             className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
           >
             {loading ? 'Loading...' : '판매중으로 변경하기'}
           </button>
         )}
-        <button
-          onClick={() => onSetProductStateClick('sold')}
-          className="cursor-pointer w-full hover:bg-orange-500 hover:text-white active:bg-orange-600 active:text-white first:rounded-l-md last:rounded-r-md active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
-        >
-          {loading ? 'Loading...' : '거래완료로 변경하기'}
-        </button>
       </div>
     </div>
   );

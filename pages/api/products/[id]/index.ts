@@ -3,12 +3,13 @@ import { client, withApiSession, withHandler } from '@libs/server/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+  const {
+    query: { id },
+    body,
+    session: { user },
+  } = req;
   switch (req.method) {
     case 'GET':
-      const {
-        query: { id },
-        session: { user },
-      } = req;
       const product = await client.product.findUnique({
         where: {
           id: +id,
@@ -48,11 +49,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         relatedProducts,
       });
       break;
-    case 'POST':
-    case 'PUT':
-    case 'DELETE':
     default:
-      res.json({
+      return res.json({
         ok: false,
         message: 'Method not allowed',
       });

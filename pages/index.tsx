@@ -1,3 +1,4 @@
+import { ProductState } from '.prisma/client';
 import { FloatingButton, Item, Layout } from '@components/index';
 import { ProductWithCount } from '@customTypes/index';
 import { useUser } from '@libs/client/index';
@@ -9,11 +10,20 @@ interface ProductResponse {
   products: ProductWithCount[];
 }
 
+function setState(state: ProductState) {
+  switch (state) {
+    case 'onList':
+      return '판매중';
+    case 'booked':
+      return '예약완료';
+    case 'sold':
+      return '판매완료';
+  }
+}
+
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   const { data } = useSWR<ProductResponse>('/api/products');
-
-  console.log(data);
 
   return (
     <Layout title="홈" hasTabBar>
@@ -22,7 +32,7 @@ const Home: NextPage = () => {
           <Item
             key={product.id}
             id={product.id}
-            title={product.name}
+            title={`[${setState(product.state)}]` + product.name}
             price={product.price}
             hearts={product._count.favs}
             imageUrl={product.imageUrl}
