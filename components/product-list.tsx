@@ -1,8 +1,6 @@
 import { Product, ProductState } from '.prisma/client';
 import { Item } from '@components/index';
 import { ProductWithCount } from '@customTypes/index';
-import { useMutation, useUser } from '@libs/client';
-import { useEffect } from 'react';
 import useSWR from 'swr';
 import ButtonItem from './button-item';
 
@@ -41,7 +39,7 @@ export default function ProductList({ kind }: ProductListProps) {
             return (
               <ButtonItem
                 key={record.id}
-                id={record.id}
+                id={record.product.id}
                 title={`[${productStatehandler(record.product.state, kind)}]` + record.product.name}
                 price={record.product.price}
                 hearts={record.product._count.favs}
@@ -55,7 +53,7 @@ export default function ProductList({ kind }: ProductListProps) {
             return (
               <Item
                 key={record.id}
-                id={record.id}
+                id={record.product.id}
                 title={`[${productStatehandler(record.product.state, kind)}]` + record.product.name}
                 price={record.product.price}
                 hearts={record.product._count.favs}

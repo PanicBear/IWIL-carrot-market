@@ -1,11 +1,12 @@
-import type { NextPage } from 'next';
-import Link from 'next/link';
 import { Layout } from '@components/index';
-import useSWR from 'swr';
-import { useUser } from '@libs/client';
-import { Message, User } from '@prisma/client';
+import { useMutation, useUser } from '@libs/client';
+import { Product, User } from '@prisma/client';
+import type { NextPage } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import useSWR from 'swr';
 
 type UserInfo = Pick<User, 'id' | 'name' | 'avatar'>;
 
@@ -20,6 +21,7 @@ interface Buyer {
 interface ChatRoomResult {
   ok: boolean;
   users: Buyer[];
+  product: Product;
 }
 
 const BuyerPick: NextPage = () => {
@@ -28,12 +30,26 @@ const BuyerPick: NextPage = () => {
   const { data, error } = useSWR<ChatRoomResult>(
     user?.id && router.query.id ? `/api/chats/sale/${router.query.id}` : null,
   );
+  const [setReserver, { loading: buyerLoading, data: buyerData, error: buyerError }] = useMutation(
+    router.query.id ? `/api/chats/sale/${router.query.id}` : '',
+  );
+
+  const onClickReservor = (buyer: UserInfo) => {
+    if (!user || !buyer || buyerError || buyerLoading) return;
+    setReserver(buyer);
+  };
+
+  useEffect(() => {
+    if (buyerData && buyerData.ok && !buyerLoading && !buyerError) {
+      router.replace('/profile/sold');
+    }
+  }, [buyerData, buyerLoading, buyerError, router]);
 
   return (
     <Layout canGoBack title="예약자 선택">
       <div className="divide-y-[1px] ">
         {data
-          ? data.users.map((user) => {
+          ? data.users?.map((user) => {
               const buyer: UserInfo = user.buyer;
               return (
                 <div className="flex justify-between" key={buyer.id}>
@@ -52,7 +68,10 @@ const BuyerPick: NextPage = () => {
                     </a>
                   </Link>
                   <div className="flex px-4 py-4">
-                    <button className="items-center w-16 cursor-pointer rounded-md border-[1px] hover:bg-orange-500 hover:text-white active:hover:bg-orange-600">
+                    <button
+                      onClick={() => onClickReservor(buyer)}
+                      className="items-center w-16 cursor-pointer rounded-md border-[1px] hover:bg-orange-500 hover:text-white active:hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none focus:border-none"
+                    >
                       선택
                     </button>
                   </div>

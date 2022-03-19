@@ -3,33 +3,22 @@ import { client, withApiSession, withHandler } from '@libs/server/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+  const {
+    query: { id },
+    body,
+    session: { user },
+  } = req;
   switch (req.method) {
     case 'GET':
-      const {
-        query: { id },
-        session: { user },
-      } = req;
       if (!user || !user.id) {
         return res.json({
           ok: false,
-          message: 'cannot get user data',
+          message: 'data not found',
         });
       }
-      const sale = await client.sale.findUnique({
-        where: {
-          id: +id,
-        },
-        select: {
-          product: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      });
       const users = await client.chatRoom.findMany({
         where: {
-          productId: sale?.product?.id,
+          productId: +id,
         },
         select: {
           buyer: {
@@ -45,6 +34,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         ok: true,
         users,
       });
+    case 'POST':
+      console.log(id);
+      const product = await client.product.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          state: 'booked',
+        },
+      });
+      if (product) {
+        const purchase = await client.purchase.create({
+          data: {
+            user: {
+              connect: {
+                id: +body.id,
+              },
+            },
+            product: {
+              connect: {
+                id: product.id,
+              },
+            },
+          },
+        });
+        return res.json({ ok: Boolean(purchase) });
+      }
+      return res.json({ ok: false, message: "could't update state of product" });
     default:
       return res.json({
         ok: false,
@@ -55,7 +72,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ['GET', 'POST'],
     handler,
   }),
 );
