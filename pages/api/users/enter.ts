@@ -37,7 +37,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   //     to: process.env.MY_PHONE!, // unable to set 'phone' from req.body, cause this is test account
   //     body: `Your login token is ${payload}.`,
   //   });
-  //   console.log(message);
   // } else if (email) {
   //   const emailMsg = await mail.send({
   //     from: 'cheonaru@gmail.com',
@@ -46,7 +45,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   //     text: `Your token is ${payload}`,
   //     html: `<strong>Your token is ${payload}</strong>`,
   //   });
-  //   console.log(emailMsg);
   // }
 
   return res.json({

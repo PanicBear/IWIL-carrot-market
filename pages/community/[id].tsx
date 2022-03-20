@@ -80,8 +80,6 @@ const CommunityPostDetail: NextPage = () => {
     }
   }, [answerData, reset, mutate]);
 
-  console.log(data);
-
   return (
     <Layout canGoBack>
       <div>
