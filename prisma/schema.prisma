@@ -39,6 +39,8 @@ model Token {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Product {
@@ -56,6 +58,8 @@ model Product {
   purchase    Purchase[]
   chatRooms   ChatRoom[]
   state       ProductState @default(onList)
+
+  @@index([userId])
 }
 
 model Fav {
@@ -66,6 +70,9 @@ model Fav {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Post {
@@ -79,6 +86,8 @@ model Post {
   userId     Int
   answers    Answer[]
   wonderings Wondering[]
+
+  @@index([userId])
 }
 
 model Answer {
@@ -90,6 +99,9 @@ model Answer {
   userId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
+
+  @@index([userId])
+  @@index([postId])
 }
 
 model Wondering {
@@ -100,6 +112,9 @@ model Wondering {
   userId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
+
+  @@index([userId])
+  @@index([postId])
 }
 
 model Review {
@@ -112,6 +127,9 @@ model Review {
   createdFor   User     @relation("receivedReview", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId Int
   score        Int      @default(1)
+
+  @@index([createdById])
+  @@index([createdForId])
 }
 
 model Sale {
@@ -122,6 +140,9 @@ model Sale {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Purchase {
@@ -132,6 +153,9 @@ model Purchase {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Stream {
@@ -147,6 +171,8 @@ model Stream {
   cloudflareId  String
   cloudflareUrl String
   cloudflareKey String
+
+  @@index([userId])
 }
 
 model Message {
@@ -160,6 +186,10 @@ model Message {
   streamId   Int?
   chatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId Int?
+
+  @@index([userId])
+  @@index([streamId])
+  @@index([chatRoomId])
 }
 
 model ChatRoom {
@@ -171,6 +201,9 @@ model ChatRoom {
   productId Int
   buyer     User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
   buyerId   Int
+
+  @@index([productId])
+  @@index([buyerId])
 }
 
 enum ProductState {
