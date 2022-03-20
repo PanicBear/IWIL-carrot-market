@@ -22,7 +22,6 @@ function setState(state: ProductState) {
 }
 
 const Home: NextPage = () => {
-  const { user, isLoading } = useUser();
   const { data } = useSWR<ProductResponse>('/api/products');
 
   return (
