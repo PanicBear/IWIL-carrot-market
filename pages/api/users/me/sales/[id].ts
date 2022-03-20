@@ -14,7 +14,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         body: { id, kind },
         session: { user },
       } = req;
-      console.log(kind);
       const isSeller = Boolean(
         await client.product.findFirst({
           where: {

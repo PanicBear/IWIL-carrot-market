@@ -78,7 +78,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         });
       }
       if (avatarId) {
-        console.log(avatarId);
         await client.user.update({
           where: {
             id: user?.id,

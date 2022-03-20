@@ -24,7 +24,6 @@ export default function withHandler({ methods, handler, isPrivate = true }: Hand
     try {
       handler(req, res);
     } catch (error) {
-      console.log(error);
       return res.status(500).json({ error });
     }
   };

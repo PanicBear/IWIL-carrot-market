@@ -35,7 +35,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         users,
       });
     case 'POST':
-      console.log(id);
       const product = await client.product.update({
         where: {
           id: +id,
