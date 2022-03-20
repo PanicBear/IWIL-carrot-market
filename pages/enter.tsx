@@ -1,5 +1,5 @@
 import { Button, Input } from '@components/index';
-import { cls, useMutation } from '@libs/client/index';
+import { cls, useMutation, useUser } from '@libs/client/index';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -35,6 +35,10 @@ export default function Enter() {
   };
   const onValid = (validForm: EnterForm) => {
     if (loading) return;
+    if (validForm.phone) {
+      const originPhone = validForm.phone.toString();
+      return enter({ ...validForm, phone: '82' + originPhone });
+    }
     enter(validForm);
   };
   const onTokenValid = (validForm: TokenForm) => {
@@ -97,7 +101,7 @@ export default function Enter() {
                   label="Phone number"
                   kind="phone"
                   type="number"
-                  placeholder="8201000000000"
+                  placeholder="01000000000"
                   required
                 />
               ) : null}
@@ -106,7 +110,7 @@ export default function Enter() {
             </form>
           </>
         )}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="relative">
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center">
@@ -129,7 +133,7 @@ export default function Enter() {
               </svg>
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
