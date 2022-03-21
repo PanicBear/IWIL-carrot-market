@@ -1,5 +1,8 @@
+import Bs from '@components/bs';
+
 import { Button, Input } from '@components/index';
 import { cls, useMutation, useUser } from '@libs/client/index';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,6 +19,8 @@ interface TokenForm {
 interface MutationResult {
   ok: boolean;
 }
+
+// const Bs = dynamic(() => import('@components/bs'), { ssr: false });
 
 export default function Enter() {
   const router = useRouter();
@@ -95,15 +100,18 @@ export default function Enter() {
                 <Input register={register('email')} name="input" type="email" label={'Email address'} required />
               ) : null}
               {method === 'phone' ? (
-                <Input
-                  register={register('phone')}
-                  name="input"
-                  label="Phone number"
-                  kind="phone"
-                  type="number"
-                  placeholder="01000000000"
-                  required
-                />
+                <>
+                  <Input
+                    register={register('phone')}
+                    name="input"
+                    label="Phone number"
+                    kind="phone"
+                    type="number"
+                    placeholder="01000000000"
+                    required
+                  />
+                  <Bs />
+                </>
               ) : null}
               {method === 'email' ? <Button text={loading ? 'Loading...' : 'Get login link'} /> : null}
               {method === 'phone' ? <Button text={loading ? 'Loading...' : 'Get one-time password'} /> : null}
