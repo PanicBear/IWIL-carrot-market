@@ -1,4 +1,4 @@
-import Bs from '@components/bs';
+// import Bs from '@components/bs';
 
 import { Button, Input } from '@components/index';
 import { cls, useMutation, useUser } from '@libs/client/index';
@@ -20,7 +20,7 @@ interface MutationResult {
   ok: boolean;
 }
 
-// const Bs = dynamic(() => import('@components/bs'), { ssr: false });
+const Bs = dynamic(() => import('@components/bs'), { ssr: false });
 
 export default function Enter() {
   const router = useRouter();
